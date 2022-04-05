@@ -27,9 +27,8 @@ formElement.addEventListener("submit", function (event) {
     colsNumber = 49;
   }
   /* create the grid */
-  createGrid(".row", colsNumber, "div", "col");
   /* create numbers in each cell */
-  generateCellsNumbers(colsNumber, ".col", "span");
+  createGrid(".row", colsNumber, "div", "col", "span");
   /* create "on click" effect */
   selectElementByClick(".col", "active");
 });
@@ -40,15 +39,25 @@ formElement.addEventListener("submit", function (event) {
  * @param {number} limit a number value that indicates the total number of the cells of the grid
  * @param {string} tagName an HTML element tag to define the HTML element for each cell
  * @param {string} className a css selector to add some style to the new cells (optional)
+ * @param {string} tagNameNumberContainer an HTML element tag to define the HTML element where will be put the cell number
  */
-function createGrid(selector, limit, tagName, className) {
+function createGrid(
+  selector,
+  limit,
+  tagName,
+  className,
+  tagNameNumberContainer
+) {
   const rowElement = document.querySelector(selector);
   rowElement.innerHTML = "";
 
-  for (let i = 0; i < limit; i++) {
+  for (let i = 1; i <= limit; i++) {
     const colElement = document.createElement(tagName);
     colElement.classList.add(className);
     rowElement.append(colElement);
+    const numberContainer = document.createElement(tagNameNumberContainer);
+    numberContainer.append(i);
+    colElement.append(numberContainer);
   }
 }
 
