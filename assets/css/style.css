@@ -43,6 +43,10 @@ img {
   background-color: rgba(0, 0, 0, 0.405);
 }
 
+.unable_click {
+  pointer-events: none;
+}
+
 .container_lg {
   width: 1200px;
   margin: auto;

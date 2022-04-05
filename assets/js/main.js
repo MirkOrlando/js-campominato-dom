@@ -46,7 +46,7 @@ formElement.addEventListener("submit", function (event) {
   /* generate bombs numbers */
   // console.log(generateBombs(16, colsNumber));
   /* create "on click" effect */
-  return selectElementByClick(".col", colsNumber, "bomb", "active");
+  selectElementByClick(".col", colsNumber, "bomb", "active");
 });
 
 /* functions */
@@ -119,6 +119,20 @@ function selectElementByClick(
           this.classList.add(classNameBomb);
           colsClicked.push(i);
           // console.log(i);
+          let j = 0;
+          while (j < bombsNumbers.length) {
+            for (let i = 1; i <= colsNumber; i++) {
+              const col = cols[i - 1];
+              if (bombsNumbers.includes(i)) {
+                col.classList.add(classNameBomb);
+              }
+            }
+            j++;
+          }
+          for (let i = 1; i <= cols.length; i++) {
+            console.log(col);
+            col.classList.add("unable_click");
+          }
           const message = `Oh no! Hai schiacciato una bomba e hai perso!<br>Punteggio: ${safeClickSum}`;
           createAlert(message);
           // console.log(safeClickSum);
