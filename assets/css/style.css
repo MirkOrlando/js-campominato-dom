@@ -103,6 +103,12 @@ main {
   transition: all 250ms linear;
 }
 
+.bomb {
+  background-color: red;
+  color: white;
+  transition: all 250ms linear;
+}
+
 /* #endregion main */
 
 /* #region footer */

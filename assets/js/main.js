@@ -9,9 +9,11 @@ Il computer deve generare 16 numeri casuali nello stesso range
 della difficoltà prescelta: le bombe.
 I numeri nella lista delle bombe non possono essere duplicati.
 In seguito l'utente clicca su una cella:
-se il numero è presente nella lista dei numeri generati - abbiamo calpestato una bomba
+se il numero è presente nella lista dei numeri generati - 
+abbiamo calpestato una bomba
 la cella si colora di rosso e la partita termina,
-altrimenti la cella cliccata si colora di azzurro e l'utente può continuare a cliccare sulle altre celle.
+altrimenti la cella cliccata si colora di azzurro e 
+l'utente può continuare a cliccare sulle altre celle.
 La partita termina quando:
 - il giocatore clicca su una bomba;
 - o raggiunge il numero massimo possibile di numeri consentiti.
@@ -42,7 +44,7 @@ formElement.addEventListener("submit", function (event) {
   /* generate bombs numbers */
   // console.log(generateBombs(16, colsNumber));
   /* create "on click" effect */
-  selectElementByClick(".col", "active", colsNumber);
+  selectElementByClick(".col", colsNumber, "bomb", "active");
 });
 
 /* functions */
@@ -88,16 +90,40 @@ function getRndInteger(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function selectElementByClick(selector, className, colsNumber) {
+function selectElementByClick(
+  selector,
+  colsNumber,
+  classNameBomb,
+  classNameSafe
+) {
   const cols = document.querySelectorAll(selector);
   const bombsNumbers = generateBombs(16, colsNumber);
-  console.log(bombsNumbers);
+  console.log(
+    bombsNumbers.sort(function (a, b) {
+      return a - b;
+    })
+  );
+  let safeClickSum = 0;
+  const maxClicks = colsNumber - 16;
+  console.log(maxClicks);
 
-  for (let i = 1; i < cols.length; i++) {
+  for (let i = 0; i < colsNumber; i++) {
     const col = cols[i];
     // console.log(col);
     col.addEventListener("click", function () {
-      this.classList.add(className);
+      if (bombsNumbers.includes(++i)) {
+        this.classList.add(classNameBomb);
+        alert("hai perso");
+        // console.log(safeClickSum);
+      } else {
+        this.classList.add(classNameSafe);
+        safeClickSum++;
+        console.log(safeClickSum);
+        if (safeClickSum === maxClicks) {
+          alert("hai vinto");
+        }
+        // console.log(safeClickSum);
+      }
     });
   }
 }
