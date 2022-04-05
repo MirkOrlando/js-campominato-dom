@@ -5,7 +5,17 @@ in cui ogni cella contiene un numero tra quelli compresi in un range:
 con difficoltà 1 => tra 1 e 100
 con difficoltà 2 => tra 1 e 81
 con difficoltà 3 => tra 1 e 49
-Quando l'utente clicca su ogni cella, la cella cliccata si colora di azzurro.
+Il computer deve generare 16 numeri casuali nello stesso range 
+della difficoltà prescelta: le bombe.
+I numeri nella lista delle bombe non possono essere duplicati.
+In seguito l'utente clicca su una cella:
+se il numero è presente nella lista dei numeri generati - abbiamo calpestato una bomba
+la cella si colora di rosso e la partita termina,
+altrimenti la cella cliccata si colora di azzurro e l'utente può continuare a cliccare sulle altre celle.
+La partita termina quando:
+- il giocatore clicca su una bomba;
+- o raggiunge il numero massimo possibile di numeri consentiti.
+Al termine della partita il software deve comunicare il punteggio, cioè il numero di volte che l’utente ha cliccato su una cella che non era una bomba.
 */
 
 const formElement = document.querySelector("form");
@@ -29,9 +39,12 @@ formElement.addEventListener("submit", function (event) {
   /* create the grid */
   /* create numbers in each cell */
   createGrid(".row", colsNumber, "div", "col", "span");
+  /* generate bombs numbers */
+  // console.log(generateBombs(16, colsNumber));
   /* create "on click" effect */
-  selectElementByClick(".col", "active");
+  selectElementByClick(".col", "active", colsNumber);
 });
+
 /* functions */
 /**
  * Grid generator
@@ -75,31 +88,27 @@ function getRndInteger(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function selectElementByClick(selector, className) {
+function selectElementByClick(selector, className, colsNumber) {
   const cols = document.querySelectorAll(selector);
+  const bombsNumbers = generateBombs(16, colsNumber);
+  console.log(bombsNumbers);
 
-  for (let i = 0; i < cols.length; i++) {
+  for (let i = 1; i < cols.length; i++) {
     const col = cols[i];
+    // console.log(col);
     col.addEventListener("click", function () {
       this.classList.add(className);
     });
   }
 }
 
-function generateCellsNumbers(limit, selector, tagName) {
-  const randomNumbers = [];
-  while (randomNumbers.length !== limit) {
-    const randomnumber = getRndInteger(1, limit);
-    if (!randomNumbers.includes(randomnumber)) {
-      randomNumbers.push(randomnumber);
+function generateBombs(limit, colsNumber) {
+  const bombsNumbers = [];
+  while (bombsNumbers.length !== limit) {
+    const bombsNumber = getRndInteger(1, colsNumber);
+    if (!bombsNumbers.includes(bombsNumber)) {
+      bombsNumbers.push(bombsNumber);
     }
   }
-  console.log(randomNumbers.length);
-  const cols = document.querySelectorAll(selector);
-  for (let i = 0; i < limit; i++) {
-    const col = cols[i];
-    const spanElement = document.createElement(tagName);
-    spanElement.append(randomNumbers[i]);
-    col.append(spanElement);
-  }
+  return bombsNumbers;
 }
