@@ -17,7 +17,9 @@ l'utente può continuare a cliccare sulle altre celle.
 La partita termina quando:
 - il giocatore clicca su una bomba;
 - o raggiunge il numero massimo possibile di numeri consentiti.
-Al termine della partita il software deve comunicare il punteggio, cioè il numero di volte che l’utente ha cliccato su una cella che non era una bomba.
+Al termine della partita il software deve comunicare il punteggio, 
+cioè il numero di volte che l’utente ha cliccato su una cella 
+che non era una bomba.
 */
 
 const formElement = document.querySelector("form");
@@ -107,22 +109,31 @@ function selectElementByClick(
   const maxClicks = colsNumber - 16;
   console.log(maxClicks);
 
-  for (let i = 0; i < colsNumber; i++) {
-    const col = cols[i];
+  for (let i = 1; i <= colsNumber; i++) {
+    const col = cols[i - 1];
+    const colsClicked = [];
     // console.log(col);
     col.addEventListener("click", function () {
-      if (bombsNumbers.includes(++i)) {
-        this.classList.add(classNameBomb);
-        alert("hai perso");
-        // console.log(safeClickSum);
-      } else {
-        this.classList.add(classNameSafe);
-        safeClickSum++;
-        console.log(safeClickSum);
-        if (safeClickSum === maxClicks) {
-          alert("hai vinto");
+      if (!colsClicked.includes(i)) {
+        if (bombsNumbers.includes(i)) {
+          this.classList.add(classNameBomb);
+          colsClicked.push(i);
+          console.log(i);
+          alert(`Oh no! Hai schiacciato una bomba e hai perso.
+  Punteggio: ${safeClickSum}`);
+          // console.log(safeClickSum);
+        } else {
+          this.classList.add(classNameSafe);
+          colsClicked.push(i);
+          safeClickSum++;
+          console.log(i);
+          // console.log(safeClickSum);
+          if (safeClickSum === maxClicks) {
+            alert(`Complimenti! Sei passato su tutte le caselle prive di bomba e hai vinto.
+  Punteggio: ${safeClickSum}`);
+          }
+          // console.log(safeClickSum);
         }
-        // console.log(safeClickSum);
       }
     });
   }
