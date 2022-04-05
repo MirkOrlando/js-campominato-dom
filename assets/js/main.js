@@ -105,7 +105,6 @@ function selectElementByClick(
       return a - b;
     })
   );
-  let winClause;
   let safeClickSum = 0;
   const maxClicks = colsNumber - 16;
   // console.log(maxClicks);
@@ -130,10 +129,10 @@ function selectElementByClick(
           // console.log(i);
           // console.log(safeClickSum);
           if (safeClickSum === maxClicks) {
-            alert(`Complimenti! Sei passato su tutte le caselle prive di bomba e hai vinto.
- Punteggio: ${safeClickSum}`);
+            const message = `Complimenti! Sei passato su tutte le caselle prive di bomba e hai vinto.<br>Punteggio: ${safeClickSum}`;
+            createAlert(message);
+            // console.log(safeClickSum);
           }
-          // console.log(safeClickSum);
         }
       }
     });
