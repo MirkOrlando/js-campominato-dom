@@ -46,7 +46,7 @@ formElement.addEventListener("submit", function (event) {
   /* generate bombs numbers */
   // console.log(generateBombs(16, colsNumber));
   /* create "on click" effect */
-  selectElementByClick(".col", colsNumber, "bomb", "active");
+  return selectElementByClick(".col", colsNumber, "bomb", "active");
 });
 
 /* functions */
@@ -105,9 +105,10 @@ function selectElementByClick(
       return a - b;
     })
   );
+  let winClause;
   let safeClickSum = 0;
   const maxClicks = colsNumber - 16;
-  console.log(maxClicks);
+  // console.log(maxClicks);
 
   for (let i = 1; i <= colsNumber; i++) {
     const col = cols[i - 1];
@@ -118,25 +119,46 @@ function selectElementByClick(
         if (bombsNumbers.includes(i)) {
           this.classList.add(classNameBomb);
           colsClicked.push(i);
-          console.log(i);
-          alert(`Oh no! Hai schiacciato una bomba e hai perso.
-  Punteggio: ${safeClickSum}`);
+          // console.log(i);
+          const message = `Oh no! Hai schiacciato una bomba e hai perso!<br>Punteggio: ${safeClickSum}`;
+          createAlert(message);
           // console.log(safeClickSum);
         } else {
           this.classList.add(classNameSafe);
           colsClicked.push(i);
           safeClickSum++;
-          console.log(i);
+          // console.log(i);
           // console.log(safeClickSum);
           if (safeClickSum === maxClicks) {
             alert(`Complimenti! Sei passato su tutte le caselle prive di bomba e hai vinto.
-  Punteggio: ${safeClickSum}`);
+ Punteggio: ${safeClickSum}`);
           }
           // console.log(safeClickSum);
         }
       }
     });
   }
+}
+
+function createAlert(message) {
+  const body = document.querySelector("body");
+  const divAlert = document.createElement("div");
+  const divAlertMessage = document.createElement("div");
+  const divDark = document.createElement("div");
+  const btnExit = document.createElement("button");
+  divAlert.classList.add("alert");
+  divAlertMessage.classList.add("alert_message");
+  btnExit.classList.add("exit");
+  divDark.classList.add("dark");
+  body.insertAdjacentElement("afterbegin", divAlert);
+  body.insertAdjacentElement("afterbegin", divDark);
+  divAlert.insertAdjacentElement("afterbegin", divAlertMessage).innerHTML =
+    message;
+  divAlert.insertAdjacentElement("afterbegin", btnExit).innerHTML = "OK";
+  btnExit.addEventListener("click", function () {
+    body.removeChild(divAlert);
+    body.removeChild(divDark);
+  });
 }
 
 function generateBombs(limit, colsNumber) {

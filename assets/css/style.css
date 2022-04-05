@@ -12,6 +12,37 @@ img {
   max-width: 100%;
 }
 
+.alert {
+  min-width: 400px;
+  min-height: 200px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  background-color: white;
+  border-radius: 10px;
+}
+
+.alert_message {
+  padding: 2rem;
+  line-height: 1.5rem;
+}
+
+.exit {
+  position: absolute;
+  left: 2rem;
+  bottom: 2rem;
+  padding: 0.25rem 0.75rem;
+}
+
+.dark {
+  height: 100vh;
+  width: 100vw;
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.405);
+}
+
 .container_lg {
   width: 1200px;
   margin: auto;
