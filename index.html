@@ -5,44 +5,52 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Campominato</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+      integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
     <link rel="stylesheet" href="/assets/css/style.css" />
   </head>
   <body>
     <header>
-        <nav class="container_lg">
-            <div class="container_logo">
-                <div class="logo">
-                  <img src="./assets/img/logo.jpg" alt="" />
-                </div>
-                <h1>Campo Minato</h1>
-            </div>
-            <!-- /container_logo -->
-            <form action="" method="post">
-              <label for="difficulty">Difficoltà:</label>
-              <select name="difficulty" id="difficulty" class="selector">
-                <option value="1">Easy</option>
-                <option value="2">Medium</option>
-                <option value="3">Hard</option>
-              </select>
-              <button type="submit" class="btn">Play</button>
-            </form>
-          </header>
-          <!-- /header -->
-        </nav>
+      <nav class="container_lg">
+        <div class="container_logo">
+          <div class="logo">
+            <img src="./assets/img/logo.jpg" alt="" />
+          </div>
+          <h1>Campo Minato</h1>
+        </div>
+        <!-- /container_logo -->
+        <form action="" method="post">
+          <label for="difficulty">Difficoltà:</label>
+          <select name="difficulty" id="difficulty" class="selector">
+            <option value="1">Easy</option>
+            <option value="2">Medium</option>
+            <option value="3">Hard</option>
+          </select>
+          <button type="submit" class="btn">Play</button>
+        </form>
+      </nav>
+    </header>
+    <!-- /header -->
+
     <main>
       <div class="container">
-        <div class="row"></div>
+        <div class="game_board"></div>
       </div>
       <!-- /.container -->
     </main>
     <!-- /main -->
     <footer>
-        <div class="container_lg">
-            <div class="credits">
-                Made with <i class="fa-solid fa-heart"></i> by <a href="#" active>Boolean</a>
-            </div>
+      <div class="container_lg">
+        <div class="credits">
+          Made with <i class="fa-solid fa-heart"></i> by
+          <a href="#" active>Boolean</a>
         </div>
+      </div>
     </footer>
     <!-- footer -->
     <script src="./assets/js/main.js"></script>

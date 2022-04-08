@@ -22,59 +22,120 @@ cioè il numero di volte che l’utente ha cliccato su una cella
 che non era una bomba.
 */
 
+/* 1. creare la griglia al click di play 
+con un numero di celle stabilito dalla difficoltà*/
+// - inizializzare una variabile per il form
 const formElement = document.querySelector("form");
-const submitElement = document.querySelector("form button");
-/* create the difficulty levels */
-formElement.addEventListener("submit", function (event) {
+// - inizializzare in una variabile l'elemento dalla DOM in cui inserirò la griglia
+const gameBoardElement = document.querySelector(".game_board");
+// - aggiungere un evento all'invio del form
+formElement.addEventListener("submit", (event) => {
   event.preventDefault();
-  const difficulty = parseInt(event.target[0].value);
-  const containerElement = document.querySelector(".container");
-  let colsNumber = 0;
-  if (difficulty === 1) {
-    containerElement.classList.add("easy");
-    colsNumber = 100;
-  } else if (difficulty === 2) {
-    containerElement.classList.add("medium");
-    colsNumber = 81;
-  } else if (difficulty === 3) {
-    containerElement.classList.add("hard");
-    colsNumber = 49;
+  //console.log("hai cliccato play");
+  //console.log(event);
+  // - inizializzare una variabile per le option disponibili
+  const difficulty = document.getElementById("difficulty").value;
+  //console.log(difficulty);
+  // - individuare quante celle ha la griglia
+  let totalCellsNumber;
+  if (difficulty == 1) {
+    gameBoardElement.classList.add("easy");
+    totalCellsNumber = 100;
+  } else if (difficulty == 2) {
+    gameBoardElement.classList.add("medium");
+    totalCellsNumber = 81;
+  } else if (difficulty == 3) {
+    gameBoardElement.classList.add("hard");
+    totalCellsNumber = 49;
   }
-  /* create the grid */
-  /* create numbers in each cell */
-  createGrid(".row", colsNumber, "div", "col", "span");
-  /* generate bombs numbers */
-  // console.log(generateBombs(16, colsNumber));
-  /* create "on click" effect */
-  selectElementByClick(".col", colsNumber, "bomb", "active");
+  //console.log(gameBoardElement, totalCellsNumber);
+  // - generare la griglia
+  generateGrid(gameBoardElement, totalCellsNumber);
+  /* 2. generare la lista delle bombe */
+  const bombs = generateBombs(16, totalCellsNumber);
+  console.log(bombs.sort((a, b) => a - b));
+  const maxPoints = totalCellsNumber - bombs.length;
+  console.log(maxPoints);
+  /* 3. aggiungere un evento al click su una cella:
+  se il numero è presente nella lista dei numeri generati, abbiamo calpestato una bomba:
+  la cella si colora di rosso e la partita termina;
+  altrimenti la cella cliccata si colora di azzurro e 
+  l'utente può continuare a cliccare sulle altre celle. */
+  // inizializzare in una variabile (array) tutte le celle della griglia
+  const cells = document.querySelectorAll(".cell");
+  const attempts = [];
+  //console.log(cells);
+  // ciclare tutte le celle della griglia
+  for (let i = 0; i < cells.length; i++) {
+    const cell = cells[i];
+    // aggiungere un evento al click su una cella
+    cell.bombs = bombs;
+    cell.attempts = attempts;
+    cell.maxPoints = maxPoints;
+    cell.addEventListener("click", clickOnACell);
+  }
 });
 
 /* functions */
-/**
- * Grid generator
- * @param {string} selector a css selector to define the container of the grid
- * @param {number} limit a number value that indicates the total number of the cells of the grid
- * @param {string} tagName an HTML element tag to define the HTML element for each cell
- * @param {string} className a css selector to add some style to the new cells (optional)
- * @param {string} tagNameNumberContainer an HTML element tag to define the HTML element where will be put the cell number
- */
-function createGrid(
-  selector,
-  limit,
-  tagName,
-  className,
-  tagNameNumberContainer
-) {
-  const rowElement = document.querySelector(selector);
-  rowElement.innerHTML = "";
 
-  for (let i = 1; i <= limit; i++) {
-    const colElement = document.createElement(tagName);
-    colElement.classList.add(className);
-    rowElement.append(colElement);
-    const numberContainer = document.createElement(tagNameNumberContainer);
-    numberContainer.append(i);
-    colElement.append(numberContainer);
+function gameOver(bombs, attempts, maxPoints) {
+  // - inizializzare una variabile (tipo array) che contenga tutte le celle
+  const cells = document.querySelectorAll(".cell");
+  //console.log(cells);
+  // - ciclare le celle
+  for (let i = 0; i < cells.length; i++) {
+    const cell = cells[i];
+    const cellNumber = Number(cell.innerHTML);
+    console.log(cellNumber, typeof cellNumber);
+    // - rivelare tutte le celle che contengono una bomba
+    if (bombs.includes(cellNumber)) {
+      cell.classList.add("bomb");
+    }
+    cell.removeEventListener("click", clickOnACell);
+  }
+  // - mostrare un alert con il punteggio
+  alert(`Punteggio: ${attempts.length}/${maxPoints}`);
+  // - rimuovere l'evente al click della cella
+  console.log(this);
+}
+
+function clickOnACell(event) {
+  //console.log(event);
+  //console.log(event.target.bombs);
+  //console.log("hai cliccato su una cella!");
+  //console.log(this);
+  // - verificare se contine una bomba oppure è "libera"
+  //console.log(this.innerHTML);
+  const bombs = event.target.bombs;
+  const attempts = event.target.attempts;
+  const maxPoints = event.target.maxPoints;
+  const cellNumber = Number(this.innerHTML);
+  if (bombs.includes(cellNumber)) {
+    this.classList.add("bomb");
+    console.log("game over");
+    gameOver(bombs, attempts, maxPoints);
+  } else if (!attempts.includes(cellNumber)) {
+    this.classList.add("active");
+    attempts.push(cellNumber);
+    if (attempts.length == maxPoints) {
+      gameOver(bombs, attempts, maxPoints);
+    }
+  }
+  console.log(attempts);
+}
+
+function generateGrid(cellContainerElement, totalCellsNumber) {
+  cellContainerElement.innerHTML = "";
+  // - creare un ciclo che si ripeterà per il numero di celle che dovrò creare
+  for (let i = 1; i <= totalCellsNumber; i++) {
+    //console.log(i);
+    //const totalCellsNumber = i + 1;
+    //console.log(totalCellsNumber);
+    // - creare una cella
+    // - assegnare ad ogni cella il proprio numero (visibile o no)
+    const cell = `<div class="cell">${i}</div>`;
+    //console.log(cell);
+    cellContainerElement.insertAdjacentHTML("beforeend", cell);
   }
 }
 
@@ -90,67 +151,6 @@ function createGrid(
  */
 function getRndInteger(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-function selectElementByClick(
-  selector,
-  colsNumber,
-  classNameBomb,
-  classNameSafe
-) {
-  const cols = document.querySelectorAll(selector);
-  const bombsNumbers = generateBombs(16, colsNumber);
-  console.log(
-    bombsNumbers.sort(function (a, b) {
-      return a - b;
-    })
-  );
-  let safeClickSum = 0;
-  const maxClicks = colsNumber - 16;
-  // console.log(maxClicks);
-
-  for (let i = 1; i <= colsNumber; i++) {
-    const col = cols[i - 1];
-    const colsClicked = [];
-    // console.log(col);
-    col.addEventListener("click", function () {
-      if (!colsClicked.includes(i)) {
-        if (bombsNumbers.includes(i)) {
-          this.classList.add(classNameBomb);
-          colsClicked.push(i);
-          // console.log(i);
-          let j = 0;
-          while (j < bombsNumbers.length) {
-            for (let i = 1; i <= colsNumber; i++) {
-              const col = cols[i - 1];
-              if (bombsNumbers.includes(i)) {
-                col.classList.add(classNameBomb);
-              }
-            }
-            j++;
-          }
-          for (let i = 1; i <= cols.length; i++) {
-            console.log(col);
-            col.classList.add("unable_click");
-          }
-          const message = `Oh no! Hai schiacciato una bomba e hai perso!<br>Punteggio: ${safeClickSum}`;
-          createAlert(message);
-          // console.log(safeClickSum);
-        } else {
-          this.classList.add(classNameSafe);
-          colsClicked.push(i);
-          safeClickSum++;
-          // console.log(i);
-          // console.log(safeClickSum);
-          if (safeClickSum === maxClicks) {
-            const message = `Complimenti! Sei passato su tutte le caselle prive di bomba e hai vinto.<br>Punteggio: ${safeClickSum}`;
-            createAlert(message);
-            // console.log(safeClickSum);
-          }
-        }
-      }
-    });
-  }
 }
 
 function createAlert(message) {
@@ -174,10 +174,10 @@ function createAlert(message) {
   });
 }
 
-function generateBombs(limit, colsNumber) {
+function generateBombs(limit, totalCellsNumber) {
   const bombsNumbers = [];
   while (bombsNumbers.length !== limit) {
-    const bombsNumber = getRndInteger(1, colsNumber);
+    const bombsNumber = getRndInteger(1, totalCellsNumber);
     if (!bombsNumbers.includes(bombsNumber)) {
       bombsNumbers.push(bombsNumber);
     }
