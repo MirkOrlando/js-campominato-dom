@@ -91,11 +91,11 @@ function gameOver(bombs, attempts, maxPoints) {
     if (bombs.includes(cellNumber)) {
       cell.classList.add("bomb");
     }
+    // - rimuovere l'evente al click della cella
     cell.removeEventListener("click", clickOnACell);
   }
   // - mostrare un alert con il punteggio
   alert(`Punteggio: ${attempts.length}/${maxPoints}`);
-  // - rimuovere l'evente al click della cella
   console.log(this);
 }
 
